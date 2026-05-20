@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HEALTH-GABON Plateforme</title>
+
+<style>
+
+/* RESET */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef2f7;
+}
+
+/* LOGIN */
+#loginPage{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.login-box{
+width:100%;
+max-width:380px;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:15px;
+}
+
+button{
+background:#00695c;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+/* DASHBOARD */
+#dashboard{
+display:none;
+}
+
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:240px;
+height:100vh;
+background:#00695c;
+padding:20px;
+color:white;
+}
+
+.sidebar button{
+background:none;
+border:none;
+color:white;
+text-align:left;
+margin-top:5px;
+width:100%;
+padding:10px;
+}
+
+.sidebar button:hover{
+background:rgba(255,255,255,0.15);
+}
+
+/* MAIN */
+.main{
+margin-left:240px;
+padding:20px;
+min-height:100vh;
+}
+
+/* CARD */
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* SECTION */
+.section{
+display:none;
+}
+
+/* PATIENT CARD */
+.patient-card{
+background:white;
+padding:15px;
+border-radius:15px;
+margin-top:15px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+border-left:5px solid #00695c;
+}
+
+/* BADGE */
+.badge{
+display:inline-block;
+padding:5px 10px;
+border-radius:8px;
+margin-top:10px;
+font-size:12px;
+color:white;
+}
+
+.green{background:green;}
+.red{background:red;}
+
+/* ========================= */
+/* ✨ PAGE D’ACCUEIL ANIMÉE */
+/* ========================= */
+
+.hero{
+height:75vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+animation:fadeIn 1s ease;
+}
+
+.logo{
+font-size:90px;
+animation:float 2s infinite ease-in-out;
+}
+
+.title{
+font-size:42px;
+color:#00695c;
+margin-top:10px;
+animation:slideDown 1s ease;
+}
+
+.subtitle{
+margin-top:10px;
+color:#444;
+max-width:500px;
+font-size:16px;
+animation:fadeIn 2s ease;
+}
+
+.startBtn{
+margin-top:20px;
+padding:12px 18px;
+background:#00695c;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.startBtn:hover{
+transform:scale(1.05);
+background:#004d40;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+@keyframes slideDown{
+from{transform:translateY(-20px);opacity:0;}
+to{transform:translateY(0);opacity:1;}
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+
+<div class="login-box">
+
+<h2>🏥 HEALTH-GABON</h2>
+
+<input id="user" placeholder="Identifiant">
+<input type="password" id="pass" placeholder="Mot de passe">
+
+<select id="role">
+<option value="admin">Administrateur</option>
+<option value="medecin">Médecin</option>
+<option value="patient">Patient</option>
+<option value="famille">Famille</option>
+</select>
+
+<button onclick="login()">Connexion</button>
+
+<p id="error" style="color:red;margin-top:10px;"></p>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+<div class="sidebar">
+
+<h2>🏥 HEALTH</h2>
+
+<button onclick="showSection('home')">Accueil</button>
+<button onclick="showSection('patients')">Patients</button>
+<button onclick="showSection('stats')">Statistiques</button>
+<button onclick="showSection('familleView')">Famille</button>
+<button onclick="showSection('admin')">Admin</button>
+
+</div>
+
+<div class="main">
+
+<!-- HOME (MODIFIÉE) -->
+<div id="home" class="section">
+
+<div class="hero">
+
+<div class="logo">🏥</div>
+
+<h1 class="title">HEALTH-GABON</h1>
+
+<p class="subtitle">
+Une plateforme intelligente au service des structures hospitalières modernes.
+</p>
+
+<button class="startBtn" onclick="showSection('patients')">
+Accéder au système
+</button>
+
+</div>
+
+</div>
+
+<!-- PATIENTS -->
+<div id="patients" class="section">
+
+<div class="card">
+
+<h2>Gestion Patients</h2>
+
+<input id="nom" placeholder="Nom">
+<input id="age" placeholder="Âge">
+<input id="maladie" placeholder="Maladie">
+<input id="structure" placeholder="Structure">
+<input id="famille" placeholder="Famille">
+
+<select id="statut">
+<option>En cours</option>
+<option>Terminée</option>
+</select>
+
+<button onclick="addPatient()">Ajouter</button>
+
+</div>
+
+<div id="patientList"></div>
+
+</div>
+
+<!-- STATS -->
+<div id="stats" class="section">
+
+<div class="card">
+<h2>📊 Statistiques</h2>
+<p>Total patients : <span id="totalPatients">0</span></p>
+</div>
+
+</div>
+
+<!-- FAMILLE -->
+<div id="familleView" class="section">
+
+<div class="card">
+
+<h2>👨‍👩‍👧 Recherche Famille</h2>
+
+<input
+id="familySearch"
+placeholder="🔍 Rechercher une famille..."
+onkeyup="searchFamily()"
+>
+
+<div id="familyResults"></div>
+
+</div>
+
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="section">
+
+<div class="card">
+<h2>Administration</h2>
+<p>Contrôle général du système</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let currentRole="";
+
+/* LOGIN */
+function login(){
+
+let u=user.value;
+let p=pass.value;
+let r=role.value;
+
+if(
+(u==="admin" && p==="admin123") ||
+(u==="medecin" && p==="med123") ||
+(u==="patient" && p==="patient123") ||
+(u==="famille" && p==="fam123")
+){
+
+currentRole=r;
+
+document.getElementById("loginPage").style.display="none";
+document.getElementById("dashboard").style.display="block";
+
+if(currentRole==="famille"){
+showSection("familleView");
+}
+
+if(currentRole==="patient"){
+showSection("stats");
+}
+
+}
+else{
+error.innerText="❌ Identifiants incorrects";
+}
+
+}
+
+/* NAVIGATION SÉCURISÉE */
+function showSection(id){
+
+if(currentRole==="famille" && id!=="familleView") return;
+
+if(currentRole==="patient" && id!=="stats") return;
+
+let sections=document.getElementsByClassName("section");
+
+for(let i=0;i<sections.length;i++){
+sections[i].style.display="none";
+}
+
+document.getElementById(id).style.display="block";
+
+}
+
+/* ADD PATIENT */
+function addPatient(){
+
+let data=JSON.parse(localStorage.getItem("patients"))||[];
+
+data.push({
+nom:nom.value,
+age:age.value,
+maladie:maladie.value,
+structure:structure.value,
+famille:famille.value,
+statut:statut.value
+});
+
+localStorage.setItem("patients",JSON.stringify(data));
+
+renderPatients();
+
+}
+
+/* RENDER */
+function renderPatients(){
+
+let data=JSON.parse(localStorage.getItem("patients"))||[];
+
+let html="";
+
+data.forEach(p=>{
+
+html+=`
+<div class="patient-card">
+<h3>${p.nom}</h3>
+<p>${p.famille}</p>
+<p>${p.maladie}</p>
+</div>
+`;
+
+});
+
+patientList.innerHTML=html;
+totalPatients.innerText=data.length;
+
+}
+
+/* FAMILY SEARCH FIX */
+function searchFamily(){
+
+let data=JSON.parse(localStorage.getItem("patients"))||[];
+
+let v=familySearch.value.toLowerCase();
+
+let html="";
+
+if(v===""){
+
+data.forEach(p=>{
+
+html+=`
+<div class="patient-card">
+<h3>👨‍👩‍👧 ${p.famille}</h3>
+<p>${p.nom}</p>
+</div>
+`;
+
+});
+
+familyResults.innerHTML=html;
+return;
+}
+
+data.forEach(p=>{
+
+if((p.famille||"").toLowerCase().includes(v)){
+
+html+=`
+<div class="patient-card">
+<h3>👨‍👩‍👧 ${p.famille}</h3>
+<p>${p.nom}</p>
+</div>
+`;
+
+}
+
+});
+
+familyResults.innerHTML=html;
+
+}
+
+/* INIT */
+window.onload=renderPatients;
+
+</script>
+
+</body>
+</html>
