@@ -55,6 +55,10 @@ border:none;
 cursor:pointer;
 }
 
+button:hover{
+opacity:0.9;
+}
+
 /* DASHBOARD */
 #dashboard{
 display:none;
@@ -70,6 +74,11 @@ height:100vh;
 background:#00695c;
 padding:20px;
 color:white;
+overflow:auto;
+}
+
+.sidebar h2{
+margin-bottom:20px;
 }
 
 .sidebar button{
@@ -80,6 +89,7 @@ text-align:left;
 margin-top:5px;
 width:100%;
 padding:10px;
+border-radius:8px;
 }
 
 .sidebar button:hover{
@@ -111,10 +121,13 @@ display:none;
 .patient-card{
 background:white;
 padding:15px;
-border-radius:15px;
-margin-top:15px;
-box-shadow:0 3px 10px rgba(0,0,0,0.08);
-border-left:5px solid #00695c;
+margin-top:10px;
+border-bottom:1px solid #ddd;
+}
+
+.patient-card h3{
+color:#00695c;
+margin-bottom:8px;
 }
 
 /* BADGE */
@@ -127,13 +140,15 @@ font-size:12px;
 color:white;
 }
 
-.green{background:green;}
-.red{background:red;}
+.green{
+background:green;
+}
 
-/* ========================= */
-/* ✨ PAGE D’ACCUEIL ANIMÉE */
-/* ========================= */
+.red{
+background:red;
+}
 
+/* HERO */
 .hero{
 height:75vh;
 display:flex;
@@ -153,7 +168,6 @@ animation:float 2s infinite ease-in-out;
 font-size:42px;
 color:#00695c;
 margin-top:10px;
-animation:slideDown 1s ease;
 }
 
 .subtitle{
@@ -161,7 +175,6 @@ margin-top:10px;
 color:#444;
 max-width:500px;
 font-size:16px;
-animation:fadeIn 2s ease;
 }
 
 .startBtn{
@@ -172,11 +185,9 @@ color:white;
 border:none;
 border-radius:10px;
 cursor:pointer;
-transition:0.3s;
 }
 
 .startBtn:hover{
-transform:scale(1.05);
 background:#004d40;
 }
 
@@ -186,15 +197,25 @@ from{opacity:0;}
 to{opacity:1;}
 }
 
-@keyframes slideDown{
-from{transform:translateY(-20px);opacity:0;}
-to{transform:translateY(0);opacity:1;}
-}
-
 @keyframes float{
 0%{transform:translateY(0);}
 50%{transform:translateY(-10px);}
 100%{transform:translateY(0);}
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
 }
 
 </style>
@@ -210,16 +231,24 @@ to{transform:translateY(0);opacity:1;}
 <h2>🏥 HEALTH-GABON</h2>
 
 <input id="user" placeholder="Identifiant">
+
 <input type="password" id="pass" placeholder="Mot de passe">
 
 <select id="role">
+
 <option value="admin">Administrateur</option>
+
 <option value="medecin">Médecin</option>
+
 <option value="patient">Patient</option>
+
 <option value="famille">Famille</option>
+
 </select>
 
-<button onclick="login()">Connexion</button>
+<button onclick="login()">
+Connexion
+</button>
 
 <p id="error" style="color:red;margin-top:10px;"></p>
 
@@ -234,31 +263,50 @@ to{transform:translateY(0);opacity:1;}
 
 <h2>🏥 HEALTH</h2>
 
-<button onclick="showSection('home')">Accueil</button>
-<button onclick="showSection('patients')">Patients</button>
-<button onclick="showSection('stats')">Statistiques</button>
-<button onclick="showSection('familleView')">Famille</button>
-<button onclick="showSection('admin')">Admin</button>
+<button onclick="showSection('home')">
+Accueil
+</button>
+
+<button onclick="showSection('patients')">
+Patients
+</button>
+
+<button onclick="showSection('stats')">
+Statistiques
+</button>
+
+<button onclick="showSection('familleView')">
+Famille
+</button>
+
+<button onclick="showSection('admin')">
+Admin
+</button>
 
 </div>
 
 <div class="main">
 
-<!-- HOME (MODIFIÉE) -->
+<!-- HOME -->
 <div id="home" class="section">
 
 <div class="hero">
 
 <div class="logo">🏥</div>
 
-<h1 class="title">HEALTH-GABON</h1>
+<h1 class="title">
+HEALTH-GABON
+</h1>
 
 <p class="subtitle">
 Une plateforme intelligente au service des structures hospitalières modernes.
 </p>
 
-<button class="startBtn" onclick="showSection('patients')">
+<button class="startBtn"
+onclick="showSection('patients')">
+
 Accéder au système
+
 </button>
 
 </div>
@@ -272,18 +320,50 @@ Accéder au système
 
 <h2>Gestion Patients</h2>
 
+<input
+id="search"
+placeholder="🔍 Rechercher un patient..."
+onkeyup="searchPatients()"
+>
+
 <input id="nom" placeholder="Nom">
+
 <input id="age" placeholder="Âge">
+
 <input id="maladie" placeholder="Maladie">
+
 <input id="structure" placeholder="Structure">
+
 <input id="famille" placeholder="Famille">
 
-<select id="statut">
-<option>En cours</option>
-<option>Terminée</option>
+<input
+id="duree"
+placeholder="Durée hospitalisation"
+>
+
+<select id="degre">
+
+<option>Faible</option>
+
+<option>Moyen</option>
+
+<option>Grave</option>
+
+<option>Critique</option>
+
 </select>
 
-<button onclick="addPatient()">Ajouter</button>
+<select id="statut">
+
+<option>En cours</option>
+
+<option>Terminée</option>
+
+</select>
+
+<button onclick="addPatient()">
+Ajouter
+</button>
 
 </div>
 
@@ -295,8 +375,37 @@ Accéder au système
 <div id="stats" class="section">
 
 <div class="card">
+
 <h2>📊 Statistiques</h2>
-<p>Total patients : <span id="totalPatients">0</span></p>
+
+<p>
+Total patients :
+<span id="totalPatients">0</span>
+</p>
+
+</div>
+
+</div>
+
+<!-- PATIENT SECURE -->
+<div id="patientSecure" class="section">
+
+<div class="card">
+
+<h2>🧑 Accès Patient Sécurisé</h2>
+
+<p>
+Entrez votre ID patient pour consulter votre dossier.
+</p>
+
+<input
+id="patientSearch"
+placeholder="🔍 Entrer votre ID..."
+onkeyup="searchPatientSecure()"
+>
+
+<div id="patientSecureResults"></div>
+
 </div>
 
 </div>
@@ -306,11 +415,15 @@ Accéder au système
 
 <div class="card">
 
-<h2>👨‍👩‍👧 Recherche Famille</h2>
+<h2>👨‍👩‍👧 Recherche Famille Sécurisée</h2>
+
+<p>
+Entrez l'ID du patient pour accéder aux informations autorisées.
+</p>
 
 <input
 id="familySearch"
-placeholder="🔍 Rechercher une famille..."
+placeholder="🔍 Entrer l'ID du patient..."
 onkeyup="searchFamily()"
 >
 
@@ -324,9 +437,12 @@ onkeyup="searchFamily()"
 <div id="admin" class="section">
 
 <div class="card">
+
 <h2>Administration</h2>
-<p>Contrôle général du système</p>
-</div>
+
+<p>
+Contrôle général du système
+</p>
 
 </div>
 
@@ -334,12 +450,47 @@ onkeyup="searchFamily()"
 
 </div>
 
-<script>
+</div>
+
+<script type="module">
+
+/* FIREBASE */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyCMaRmlGQCDOkRn5gVpxcY6ROJ1DcnFmjQ",
+
+authDomain: "health-gabon-7f0d3.firebaseapp.com",
+
+projectId: "health-gabon-7f0d3",
+
+storageBucket: "health-gabon-7f0d3.firebasestorage.app",
+
+messagingSenderId: "94306151872",
+
+appId: "1:94306151872:web:40d5294cf7629a9a44ec25"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
 
 let currentRole="";
 
 /* LOGIN */
-function login(){
+window.login = function(){
 
 let u=user.value;
 let p=pass.value;
@@ -354,134 +505,354 @@ if(
 
 currentRole=r;
 
-document.getElementById("loginPage").style.display="none";
-document.getElementById("dashboard").style.display="block";
+document.getElementById("loginPage")
+.style.display="none";
+
+document.getElementById("dashboard")
+.style.display="block";
+
+showSection("home");
 
 if(currentRole==="famille"){
 showSection("familleView");
 }
 
 if(currentRole==="patient"){
-showSection("stats");
+showSection("patientSecure");
 }
 
 }
 else{
-error.innerText="❌ Identifiants incorrects";
-}
+
+error.innerText=
+"❌ Identifiants incorrects";
 
 }
 
-/* NAVIGATION SÉCURISÉE */
-function showSection(id){
+}
 
-if(currentRole==="famille" && id!=="familleView") return;
+/* NAVIGATION */
+window.showSection = function(id){
 
-if(currentRole==="patient" && id!=="stats") return;
+if(currentRole==="famille" &&
+id!=="familleView") return;
 
-let sections=document.getElementsByClassName("section");
+if(currentRole==="patient" &&
+id!=="patientSecure") return;
+
+let sections=
+document.getElementsByClassName("section");
 
 for(let i=0;i<sections.length;i++){
+
 sections[i].style.display="none";
+
 }
 
-document.getElementById(id).style.display="block";
+document.getElementById(id)
+.style.display="block";
 
 }
 
 /* ADD PATIENT */
-function addPatient(){
+window.addPatient = async function(){
 
-let data=JSON.parse(localStorage.getItem("patients"))||[];
+await addDoc(
+collection(db,"patients"),
+{
 
-data.push({
+id:
+"PT-" + Math.floor(Math.random()*99999),
+
 nom:nom.value,
-age:age.value,
-maladie:maladie.value,
-structure:structure.value,
-famille:famille.value,
-statut:statut.value
-});
 
-localStorage.setItem("patients",JSON.stringify(data));
+age:age.value,
+
+maladie:maladie.value,
+
+structure:structure.value,
+
+famille:famille.value,
+
+duree:duree.value,
+
+degre:degre.value,
+
+statut:statut.value
+
+}
+
+);
 
 renderPatients();
 
 }
 
 /* RENDER */
-function renderPatients(){
+async function renderPatients(){
 
-let data=JSON.parse(localStorage.getItem("patients"))||[];
+const querySnapshot =
+await getDocs(
+collection(db,"patients")
+);
 
 let html="";
 
-data.forEach(p=>{
+let total=0;
 
-html+=`
-<div class="patient-card">
+querySnapshot.forEach((docItem)=>{
+
+let p = docItem.data();
+
+html += `
+
+<div class="patient-card patient-item">
+
 <h3>${p.nom}</h3>
-<p>${p.famille}</p>
-<p>${p.maladie}</p>
+
+<p><b>ID :</b> ${p.id}</p>
+
+<p><b>Âge :</b> ${p.age}</p>
+
+<p><b>Famille :</b> ${p.famille}</p>
+
+<p><b>Maladie :</b> ${p.maladie}</p>
+
+<p><b>Structure :</b> ${p.structure}</p>
+
+<p><b>Durée :</b> ${p.duree}</p>
+
+<p><b>Degré :</b> ${p.degre}</p>
+
+<span class="badge
+${p.statut==="En cours"
+? "green"
+: "red"}">
+
+${p.statut}
+
+</span>
+
 </div>
+
 `;
+
+total++;
 
 });
 
-patientList.innerHTML=html;
-totalPatients.innerText=data.length;
+patientList.innerHTML = html;
+
+totalPatients.innerText = total;
 
 }
 
-/* FAMILY SEARCH FIX */
-function searchFamily(){
+/* SEARCH PATIENT */
+window.searchPatients = function(){
 
-let data=JSON.parse(localStorage.getItem("patients"))||[];
+let value=
+document.getElementById("search")
+.value
+.toLowerCase()
+.trim();
 
-let v=familySearch.value.toLowerCase();
+let cards=
+document.querySelectorAll(".patient-item");
 
-let html="";
+cards.forEach(card=>{
 
-if(v===""){
+let text=
+card.innerText.toLowerCase();
 
-data.forEach(p=>{
+if(text.includes(value)){
 
-html+=`
-<div class="patient-card">
-<h3>👨‍👩‍👧 ${p.famille}</h3>
-<p>${p.nom}</p>
-</div>
-`;
+card.style.display="block";
+
+}
+else{
+
+card.style.display="none";
+
+}
 
 });
 
-familyResults.innerHTML=html;
+}
+
+/* PATIENT SECURE */
+window.searchPatientSecure = async function(){
+
+const querySnapshot =
+await getDocs(
+collection(db,"patients")
+);
+
+let value =
+document.getElementById("patientSearch")
+.value
+.toLowerCase()
+.trim();
+
+let html = "";
+
+if(value === ""){
+
+patientSecureResults.innerHTML = `
+<p>
+🔒 Veuillez entrer votre ID patient.
+</p>
+`;
+
 return;
+
 }
 
-data.forEach(p=>{
+let found = false;
 
-if((p.famille||"").toLowerCase().includes(v)){
+querySnapshot.forEach((docItem)=>{
 
-html+=`
+let p = docItem.data();
+
+if(
+(p.id || "")
+.toLowerCase() === value
+){
+
+found = true;
+
+html += `
+
 <div class="patient-card">
-<h3>👨‍👩‍👧 ${p.famille}</h3>
-<p>${p.nom}</p>
+
+<h3>🧑 ${p.nom}</h3>
+
+<p><b>ID :</b> ${p.id}</p>
+
+<p><b>Âge :</b> ${p.age}</p>
+
+<p><b>Maladie :</b> ${p.maladie}</p>
+
+<p><b>Structure :</b> ${p.structure}</p>
+
+<p><b>Durée :</b> ${p.duree}</p>
+
+<p><b>Degré :</b> ${p.degre}</p>
+
+<p><b>Statut :</b> ${p.statut}</p>
+
 </div>
+
 `;
 
 }
 
 });
 
-familyResults.innerHTML=html;
+if(!found){
+
+html = `
+<p style="color:red;">
+❌ Aucun patient trouvé avec cet ID.
+</p>
+`;
+
+}
+
+patientSecureResults.innerHTML = html;
+
+}
+
+/* SEARCH FAMILY */
+window.searchFamily = async function(){
+
+const querySnapshot =
+await getDocs(
+collection(db,"patients")
+);
+
+let value =
+document.getElementById("familySearch")
+.value
+.toLowerCase()
+.trim();
+
+let html = "";
+
+if(value === ""){
+
+familyResults.innerHTML = `
+<p>
+🔒 Veuillez entrer un ID patient.
+</p>
+`;
+
+return;
+
+}
+
+let found = false;
+
+querySnapshot.forEach((docItem)=>{
+
+let p = docItem.data();
+
+if(
+(p.id || "")
+.toLowerCase() === value
+){
+
+found = true;
+
+html += `
+
+<div class="patient-card">
+
+<h3>🧑 ${p.nom}</h3>
+
+<p><b>ID :</b> ${p.id}</p>
+
+<p><b>Âge :</b> ${p.age}</p>
+
+<p><b>Famille :</b> ${p.famille}</p>
+
+<p><b>Structure :</b> ${p.structure}</p>
+
+<p><b>Durée :</b> ${p.duree}</p>
+
+<p><b>Degré :</b> ${p.degre}</p>
+
+<p><b>Statut :</b> ${p.statut}</p>
+
+</div>
+
+`;
+
+}
+
+});
+
+if(!found){
+
+html = `
+<p style="color:red;">
+❌ Aucun patient trouvé avec cet ID.
+</p>
+`;
+
+}
+
+familyResults.innerHTML = html;
 
 }
 
 /* INIT */
-window.onload=renderPatients;
+window.onload = async ()=>{
+
+await renderPatients();
+
+};
 
 </script>
 
 </body>
-</html>
+  </html>
