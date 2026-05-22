@@ -148,6 +148,12 @@ background:green;
 background:red;
 }
 
+/* DELETE BUTTON */
+.deleteBtn{
+margin-top:12px;
+background:#d32f2f;
+}
+
 /* HERO */
 .hero{
 height:75vh;
@@ -452,45 +458,12 @@ Contrôle général du système
 
 </div>
 
-<script type="module">
-
-/* FIREBASE */
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyCMaRmlGQCDOkRn5gVpxcY6ROJ1DcnFmjQ",
-
-authDomain: "health-gabon-7f0d3.firebaseapp.com",
-
-projectId: "health-gabon-7f0d3",
-
-storageBucket: "health-gabon-7f0d3.firebasestorage.app",
-
-messagingSenderId: "94306151872",
-
-appId: "1:94306151872:web:40d5294cf7629a9a44ec25"
-
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
+<script>
 
 let currentRole="";
 
 /* LOGIN */
-window.login = function(){
+function login(){
 
 let u=user.value;
 let p=pass.value;
@@ -532,7 +505,7 @@ error.innerText=
 }
 
 /* NAVIGATION */
-window.showSection = function(id){
+function showSection(id){
 
 if(currentRole==="famille" &&
 id!=="familleView") return;
@@ -555,11 +528,14 @@ document.getElementById(id)
 }
 
 /* ADD PATIENT */
-window.addPatient = async function(){
+function addPatient(){
 
-await addDoc(
-collection(db,"patients"),
-{
+let data =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+data.push({
 
 id:
 "PT-" + Math.floor(Math.random()*99999),
@@ -580,8 +556,11 @@ degre:degre.value,
 
 statut:statut.value
 
-}
+});
 
+localStorage.setItem(
+"patients",
+JSON.stringify(data)
 );
 
 renderPatients();
@@ -589,20 +568,16 @@ renderPatients();
 }
 
 /* RENDER */
-async function renderPatients(){
+function renderPatients(){
 
-const querySnapshot =
-await getDocs(
-collection(db,"patients")
-);
+let data =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
 
 let html="";
 
-let total=0;
-
-querySnapshot.forEach((docItem)=>{
-
-let p = docItem.data();
+data.forEach((p,index)=>{
 
 html += `
 
@@ -633,22 +608,47 @@ ${p.statut}
 
 </span>
 
+<button
+class="deleteBtn"
+onclick="deletePatient(${index})">
+
+Supprimer
+
+</button>
+
 </div>
 
 `;
-
-total++;
 
 });
 
 patientList.innerHTML = html;
 
-totalPatients.innerText = total;
+totalPatients.innerText = data.length;
+
+}
+
+/* DELETE */
+function deletePatient(index){
+
+let data =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
+
+data.splice(index,1);
+
+localStorage.setItem(
+"patients",
+JSON.stringify(data)
+);
+
+renderPatients();
 
 }
 
 /* SEARCH PATIENT */
-window.searchPatients = function(){
+function searchPatients(){
 
 let value=
 document.getElementById("search")
@@ -680,12 +680,12 @@ card.style.display="none";
 }
 
 /* PATIENT SECURE */
-window.searchPatientSecure = async function(){
+function searchPatientSecure(){
 
-const querySnapshot =
-await getDocs(
-collection(db,"patients")
-);
+let data =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
 
 let value =
 document.getElementById("patientSearch")
@@ -709,9 +709,7 @@ return;
 
 let found = false;
 
-querySnapshot.forEach((docItem)=>{
-
-let p = docItem.data();
+data.forEach((p)=>{
 
 if(
 (p.id || "")
@@ -763,12 +761,12 @@ patientSecureResults.innerHTML = html;
 }
 
 /* SEARCH FAMILY */
-window.searchFamily = async function(){
+function searchFamily(){
 
-const querySnapshot =
-await getDocs(
-collection(db,"patients")
-);
+let data =
+JSON.parse(
+localStorage.getItem("patients")
+) || [];
 
 let value =
 document.getElementById("familySearch")
@@ -792,9 +790,7 @@ return;
 
 let found = false;
 
-querySnapshot.forEach((docItem)=>{
-
-let p = docItem.data();
+data.forEach((p)=>{
 
 if(
 (p.id || "")
@@ -846,9 +842,9 @@ familyResults.innerHTML = html;
 }
 
 /* INIT */
-window.onload = async ()=>{
+window.onload = function(){
 
-await renderPatients();
+renderPatients();
 
 };
 
